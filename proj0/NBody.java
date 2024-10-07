@@ -42,7 +42,24 @@ public class NBody{
         for (Planet a : b){
             a.draw();
         }
-
-    }
+        StdDraw.enableDoubleBuffering();
+        for (double t = 0; t <= T; t = t + dt){
+            double [] xForces = new double[5];
+            double [] yForces = new double[5];
+            for (int i = 0; i < 5; i = i + 1){
+                xForces[i] = b[i].calcNetForceExertedByX(b);
+                yForces[i] = b[i].calcNetForceExertedByY(b);
+                b[i].update(dt, xForces[i], yForces[i]);
+            }
+            StdDraw.setScale(-radius, radius);
+            StdDraw.picture(0.0, 0.0, "images/starfield.jpg");
+            for (int i = 0; i < 5; i = i + 1){
+                b[i].update(dt, xForces[i], yForces[i]);
+                b[i].draw();
+            }
+            StdDraw.show();
+            StdDraw.pause(10);
+        }
+        }
 }
 
