@@ -49,10 +49,32 @@ public class Planet{
         double sum = 0;
         for(int i = 0; i < allPlanets.length; i = i + 1){
             Planet b = allPlanets[i];
-            if (! this.equal(b)){
+            if (! this.equals(b)){
                 sum = sum + this.calcForceExertedByX(b);
             }
         }
-
+        return sum;
     }
+     
+    public double calcNetForceExertedByY(Planet[] allPlanets){
+        double sum = 0;
+        for (int i =0; i < allPlanets.length; i = i + 1){
+            Planet b = allPlanets[i];
+            if (! this.equals(b)){
+                sum = sum + this.calcForceExertedByY((b));
+            }
+        }
+        return sum;
+    }
+
+ // simulate the changes of position and v after the force in a given period
+    public void update(double dt, double fX, double fY){
+        double aX = fX / this.mass;
+        double aY = fY / this.mass;
+        this.xxVel = this.xxVel + aX * dt;
+        this.yyVel = this.yyVel + aY * dt;
+        this.xxPos = this.xxPos + dt * this.xxVel;
+        this.yyPos = this.yyPos + dt * this.yyVel;
+    }
+
 }
