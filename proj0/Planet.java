@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Planet{
     // public static constant
     public static double G = 6.67e-11;
@@ -78,6 +80,6 @@ public class Planet{
     }
 
     public void draw(){
-        StdDraw.picture(this.xxPos, this.yyPos, this.imgFileName);
+        StdDraw.picture(this.xxPos, this.yyPos, "images/" + this.imgFileName);
     }
 }

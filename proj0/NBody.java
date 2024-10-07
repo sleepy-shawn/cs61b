@@ -23,7 +23,7 @@ public class NBody{
             double xv = in.readDouble();
             double yv = in.readDouble();
             double m = in.readDouble();
-            String im = "images/" + in.readString();
+            String im = in.readString();
             b[i] = new Planet(xp, yp, xv, yv, m, im);
             
         }
