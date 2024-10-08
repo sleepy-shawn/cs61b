@@ -1,8 +1,8 @@
 import java.util.Scanner;
 
 public class Planet{
-    // public static constant
-    public static double G = 6.67e-11;
+    // public static constant the G should be declared private
+    private static double G = 6.67e-11;
     public double xxPos;
     public double yyPos;
     public double xxVel;

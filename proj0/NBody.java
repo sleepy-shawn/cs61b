@@ -49,7 +49,6 @@ public class NBody{
             for (int i = 0; i < planets.length; i = i + 1){
                 xForces[i] = planets[i].calcNetForceExertedByX(planets);
                 yForces[i] = planets[i].calcNetForceExertedByY(planets);
-                planets[i].update(dt, xForces[i], yForces[i]);
             }
             StdDraw.setScale(-radius, radius);
             StdDraw.picture(0.0, 0.0, "images/starfield.jpg");
@@ -62,10 +61,12 @@ public class NBody{
         }
         StdOut.printf("%d\n", planets.length);
         StdOut.printf("%.2e\n", radius);
+        StdOut.printf("%d\n", planets.length);
+        StdOut.printf("%.2e\n", radius);
         for (int i = 0; i < planets.length; i++) {
             StdOut.printf("%11.4e %11.4e %11.4e %11.4e %11.4e %12s\n",
-            planets[i].xxPos, planets[i].yyPos, planets[i].xxVel,
-            planets[i].yyVel, planets[i].mass, planets[i].imgFileName);   
+                        planets[i].xxPos, planets[i].yyPos, planets[i].xxVel,
+                        planets[i].yyVel, planets[i].mass, planets[i].imgFileName);   
         }
     }
 }
