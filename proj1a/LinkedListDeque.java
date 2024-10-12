@@ -29,18 +29,28 @@ public class LinkedListDeque <Horse> {
 
     public LinkedListDeque(){
         size = 0;
-        last = null;
         sentinel = new StuffNode(null, null, null);
+        last = sentinel.next;
     }
 
     public void addFirst(Horse item){
+        StuffNode newNode= new StuffNode(sentinel, item, sentinel.next);
+        sentinel.next.prev = newNode;
+        sentinel.next = newNode;
+        if (isEmpty()){
+            last = sentinel.next;
+        }
         size += 1;
-        sentinel.next = new StuffNode(sentinel, item, sentinel.next);
+
+
     }
 
     public void addLast(Horse item){
         size += 1;
-        sentinel.prev = new StuffNode(last, item, sentinel);
+        StuffNode newNode = new StuffNode(last, item, sentinel);
+        sentinel.prev.next = newNode;
+        sentinel.prev = newNode;
+        last = sentinel.prev;
     }
 
     public boolean isEmpty() {
@@ -54,7 +64,7 @@ public class LinkedListDeque <Horse> {
     /** wait for optimization */
     public void printDeque(){
         StuffNode p = sentinel.next;
-        while (p != null){
+        while (p != sentinel){
             System.out.print(p.item + "");
             p = p.next;
         }
@@ -64,9 +74,13 @@ public class LinkedListDeque <Horse> {
         if (isEmpty()){
             return null;
         }
-        size -= 1;
         Horse before_first = sentinel.next.item;
+        sentinel.next.next.prev = sentinel;
         sentinel.next = sentinel.next.next;
+        size -= 1;
+        if (isEmpty()){
+            last = new StuffNode(sentinel, null, sentinel);
+        }
         return before_first;
     }
     /**  is it True? */
@@ -74,9 +88,11 @@ public class LinkedListDeque <Horse> {
         if (isEmpty()){
             return null;
         }
-        size -= 1;
         Horse before_last = sentinel.prev.item;
+        sentinel.prev.prev.next = sentinel;
         sentinel.prev = sentinel.prev.prev;
+        size -= 1;
+        last = sentinel.prev;
         return before_last;
     }
 
@@ -85,8 +101,8 @@ public class LinkedListDeque <Horse> {
         if (index < 0 || index >= size){
             return null;
         }
-        StuffNode p = sentinel;
-        while (index >= 0){
+        StuffNode p = sentinel.next;
+        while (index > 0){
             p = p.next;
             index -= 1;
         }
