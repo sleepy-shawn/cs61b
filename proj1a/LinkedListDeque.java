@@ -17,8 +17,8 @@ public class LinkedListDeque <Horse> {
             next = s2;
         }
     }
-    /** is last a pointer?
-     * set sentienl item to be null*/
+    /** last is a pointer
+     * set sentinel item to be null*/
     public LinkedListDeque (Horse x){
         size = 1;
         sentinel = new StuffNode(null, null, null);
@@ -32,7 +32,7 @@ public class LinkedListDeque <Horse> {
         last = null;
         sentinel = new StuffNode(null, null, null);
     }
-    /** wait to be solved  I wonder i seldom use prev */
+
     public void addFirst(Horse item){
         size += 1;
         sentinel.next = new StuffNode(sentinel, item, sentinel.next);
@@ -87,4 +87,19 @@ public class LinkedListDeque <Horse> {
         return p.next.item;
 
     }
+
+    // helper function by middleman
+    public Horse getRecursive(StuffNode middleman, int index) {
+        if (middleman.next == null) {
+            return null;
+        } else {
+            return getRecursive(middleman.next, index - 1);
+        }
+    }
+
+
+    public Horse getRecursive(int index){
+        return getRecursive(sentinel, index);
+        }
 }
+
