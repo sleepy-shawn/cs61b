@@ -22,12 +22,19 @@ public class ArrayDeque<T> {
      // size equals the number of items
 
      // helper function, a little bit tricky
+    // finally choose the option2
 
      public void resize(int x){
          T[] a = (T[]) new Object[x];
-         System.arraycopy(items, start,a,start + size, size - start + 1);
-         System.arraycopy(items, 0, a, 0, size - start - 1);
+         int p = (nextFirst + 1) % size;
+         // cannot use copy directly, must guarantee the right order;
+         for (int i = 0; i < size; i += 1){
+             a[i] = items[p];
+             p = (p + 1) % size;
+         }
          items = a;
+         nextFirst = items.length - 1;
+         nextLast = size;
      }
 
      public void addFirst(T x){
@@ -61,10 +68,10 @@ public class ArrayDeque<T> {
      }
 
      public void printDeque(){
-         int p = nextFirst;
+         int p = (nextFirst + 1) % items.length;
          for (int i = 0; i < size; i += 1){
-             p = (nextFirst + 1) % items.length;
-             System.out.print(items[nextFirst] + "");
+             System.out.print(items[p] + "");
+             p = (p + 1) % items.length;
          }
 
      }
@@ -94,7 +101,7 @@ public class ArrayDeque<T> {
 
      // from nextfirst to next last
      public T get(int index){
-         if (isEmpty()){
+         if (index >= size || index < 0){
              return null;
          }
          return items[((nextFirst + 1 + index) % items.length)];
