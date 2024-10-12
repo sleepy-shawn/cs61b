@@ -40,7 +40,7 @@ public class LinkedListDeque <Horse> {
 
     public void addLast(Horse item){
         size += 1;
-        sentinel.prev = new StuffNode(last,item, sentinel);
+        sentinel.prev = new StuffNode(last, item, sentinel);
     }
 
     public boolean isEmpty() {
@@ -61,6 +61,9 @@ public class LinkedListDeque <Horse> {
     }
 
     public Horse removeFirst(){
+        if (isEmpty()){
+            return null;
+        }
         size -= 1;
         Horse before_first = sentinel.next.item;
         sentinel.next = sentinel.next.next;
@@ -68,6 +71,9 @@ public class LinkedListDeque <Horse> {
     }
     /**  is it True? */
     public Horse removeLast(){
+        if (isEmpty()){
+            return null;
+        }
         size -= 1;
         Horse before_last = sentinel.prev.item;
         sentinel.prev = sentinel.prev.prev;
@@ -76,30 +82,31 @@ public class LinkedListDeque <Horse> {
 
     /** how to solve these problems more elegantly*/
     public Horse get(int index){
-        if (index > (size - 1)){
+        if (index < 0 || index >= size){
             return null;
         }
         StuffNode p = sentinel;
-        while (index != 0){
+        while (index >= 0){
             p = p.next;
             index -= 1;
         }
-        return p.next.item;
-
+        return p.item;
     }
 
     // helper function by middleman
-    public Horse getRecursive(StuffNode middleman, int index) {
-        if (middleman.next == null) {
-            return null;
-        } else {
-            return getRecursive(middleman.next, index - 1);
+    public Horse getRecursive(StuffNode middleman, int index){
+        if (index == 0){
+            return middleman.next.item;
         }
+        return getRecursive(middleman.next, index - 1);
     }
 
 
     public Horse getRecursive(int index){
-        return getRecursive(sentinel, index);
+        if (isEmpty()){
+            return null;
         }
+        return getRecursive(sentinel, index);
+    }
 }
 

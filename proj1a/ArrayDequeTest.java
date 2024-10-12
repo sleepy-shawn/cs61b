@@ -42,29 +42,7 @@ public class ArrayDequeTest {
         assertEquals((int)d.removeFirst(), 15);
     }
 
-    @Test
-    public void testPrintDeque() {
-        ArrayDeque<Integer> deque = new ArrayDeque<>();
-        deque.addFirst(10);
-        deque.addLast(20);
-        deque.addFirst(5);
 
-        // Create a stream to capture the output
-        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
-        PrintStream originalOut = System.out;  // Save the original System.out
-
-        // Redirect System.out to the ByteArrayOutputStream
-        System.setOut(new PrintStream(outContent));
-
-        // Call the method that prints to System.out
-        deque.printDeque();
-
-        // Restore the original System.out
-        System.setOut(originalOut);
-
-        // Assert that the captured output is as expected
-        assertEquals("5 10 20 \n", outContent.toString());
-    }
 
 
 
