@@ -12,6 +12,7 @@ public class ArrayDeque<T> {
      * [6,8,9,4,3,
      * possible learn from python list
      */
+
      public ArrayDeque() {
          items = (T[]) new Object[8];
          size = 0;
@@ -26,11 +27,11 @@ public class ArrayDeque<T> {
 
      public void resize(int x){
          T[] a = (T[]) new Object[x];
-         int p = (nextFirst + 1) % size;
+         int p = (nextFirst + 1) % items.length;
          // cannot use copy directly, must guarantee the right order;
          for (int i = 0; i < size; i += 1){
              a[i] = items[p];
-             p = (p + 1) % size;
+             p = (p + 1) % items.length;
          }
          items = a;
          nextFirst = items.length - 1;
@@ -44,8 +45,6 @@ public class ArrayDeque<T> {
          items[nextFirst] = x;
          nextFirst = (nextFirst - 1 + items.length) % items.length;
          size += 1;
-
-
      }
 
      public void addLast(T x){
@@ -55,12 +54,10 @@ public class ArrayDeque<T> {
          items[nextLast] = x;
          nextLast = (nextLast + 1) % items.length;
          size += 1;
-
      }
 
      public boolean isEmpty(){
         return size == 0;
-
      }
 
      public int size(){
@@ -70,10 +67,9 @@ public class ArrayDeque<T> {
      public void printDeque(){
          int p = (nextFirst + 1) % items.length;
          for (int i = 0; i < size; i += 1){
-             System.out.print(items[p] + "");
+             System.out.print(items[p] + " ");
              p = (p + 1) % items.length;
          }
-
      }
 
      public T removeFirst(){
@@ -97,7 +93,6 @@ public class ArrayDeque<T> {
          size -= 1;
          return lastItem;
      }
-
 
      // from nextfirst to next last
      public T get(int index){

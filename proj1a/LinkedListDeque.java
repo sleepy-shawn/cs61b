@@ -5,7 +5,6 @@ public class LinkedListDeque <Horse> {
     private int size;
     private StuffNode last;
 
-
     private class StuffNode {
         public StuffNode prev;
         public Horse item;
@@ -17,6 +16,7 @@ public class LinkedListDeque <Horse> {
             next = s2;
         }
     }
+
     /** last is a pointer
      * set sentinel item to be null*/
     public LinkedListDeque (Horse x){
@@ -24,33 +24,29 @@ public class LinkedListDeque <Horse> {
         sentinel = new StuffNode(null, null, null);
         sentinel.next = new StuffNode(sentinel, x , sentinel);
         sentinel.prev = sentinel.next;
-        last = sentinel.next;
+        last = sentinel.prev;
     }
 
     public LinkedListDeque(){
         size = 0;
         sentinel = new StuffNode(null, null, null);
-        last = sentinel.next;
+        sentinel.next =sentinel;
+        sentinel.prev = sentinel;
+        last = sentinel;
     }
 
     public void addFirst(Horse item){
         StuffNode newNode= new StuffNode(sentinel, item, sentinel.next);
         sentinel.next.prev = newNode;
         sentinel.next = newNode;
-        if (isEmpty()){
-            last = sentinel.next;
-        }
         size += 1;
-
-
     }
 
     public void addLast(Horse item){
-        size += 1;
         StuffNode newNode = new StuffNode(last, item, sentinel);
         sentinel.prev.next = newNode;
         sentinel.prev = newNode;
-        last = sentinel.prev;
+        size += 1;
     }
 
     public boolean isEmpty() {
@@ -65,7 +61,7 @@ public class LinkedListDeque <Horse> {
     public void printDeque(){
         StuffNode p = sentinel.next;
         while (p != sentinel){
-            System.out.print(p.item + "");
+            System.out.print(p.item + " ");
             p = p.next;
         }
     }
@@ -79,10 +75,11 @@ public class LinkedListDeque <Horse> {
         sentinel.next = sentinel.next.next;
         size -= 1;
         if (isEmpty()){
-            last = new StuffNode(sentinel, null, sentinel);
+            last = sentinel;
         }
         return before_first;
     }
+
     /**  is it True? */
     public Horse removeLast(){
         if (isEmpty()){
@@ -92,7 +89,9 @@ public class LinkedListDeque <Horse> {
         sentinel.prev.prev.next = sentinel;
         sentinel.prev = sentinel.prev.prev;
         size -= 1;
-        last = sentinel.prev;
+        if (isEmpty()){
+            last = sentinel;
+        }
         return before_last;
     }
 
