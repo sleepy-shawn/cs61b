@@ -3,9 +3,9 @@ import java.util.Map;
 public class ArrayDeque<T> {
      private int size;
      private T[] items;
-     private int start;
      private int nextFirst;
      private int nextLast;
+     // gpt gives me an inspiration to give up start
 
     /** help thin how to add first
      *  0 1 2 3 4 5 6 7 8 9 10
@@ -15,9 +15,8 @@ public class ArrayDeque<T> {
      public ArrayDeque() {
          items = (T[]) new Object[8];
          size = 0;
-         start = 4; // probably to be updated after resizing
-         nextFirst = start;
-         nextLast = start;
+         nextFirst = items.length / 2;
+         nextLast = items.length / 2 - 1;
      }
      // Invariants: the item to be added is always at the position of size.
      // size equals the number of items
@@ -44,9 +43,6 @@ public class ArrayDeque<T> {
          }
          items[nextFirst] = x;
          nextFirst -= 1;
-         if (isEmpty()){
-             nextLast += 1;
-         }
          size += 1;
 
 
@@ -63,9 +59,6 @@ public class ArrayDeque<T> {
          }
          items[nextLast] = x;
          nextLast += 1;
-         if (isEmpty()){
-             nextFirst += 1;
-         }
          size += 1;
 
      }
@@ -80,11 +73,10 @@ public class ArrayDeque<T> {
      }
 
      public void printDeque(){
-         for (int i = start; i <= items.length; i += 1){
-            System.out.print(items[i] + "");
-         }
-         for (int i = 0; i < start; i += 1){
-             System.out.print(items[i] + "");
+         int p = nextFirst;
+         for (int i = 0; i < size; i += 1){
+             p = (nextFirst + 1) % items.length;
+             System.out.print(items[nextFirst] + "");
          }
 
      }
@@ -93,10 +85,12 @@ public class ArrayDeque<T> {
          if (isEmpty()){
              return null;
          }
-         T firstItem = items[nextFirst + 1];
-         items[nextFirst + 1] = null;
+         // how to change for elegance
+         nextFirst = (nextFirst + 1) % items.length;
+
+         T firstItem = items[nextFirst];
+         items[nextFirst] = null;
          size -= 1;
-         nextFirst += 1;
          return firstItem;
     }
 
@@ -104,25 +98,20 @@ public class ArrayDeque<T> {
          if (isEmpty()){
              return null;
          }
-         T lastItem = items[nextLast - 1];
-         items[nextLast - 1] = null;
+         nextLast = (nextLast - 1 + items.length) % items.length ;
+         T lastItem = items[nextLast];
+         items[nextLast] = null;
          size -= 1;
-         nextLast -= 1;
          return lastItem;
      }
 
+
+     // from nextfirst to next last
      public T get(int index){
          if (isEmpty()){
              return null;
          }
-         int p = start;
-         while (index > 0){
-             p = p + 1;
-             if (p > items.length){
-                 p = 0;
-             }
-             index -= 1;
-         }
-         return items[p];
+         int p = nextFirst;
+         return items[((p + 1 + index) % items.length)];
      }
 }
