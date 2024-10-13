@@ -11,11 +11,11 @@ public class IntList {
     /**
      * First element of list.
      */
-    public int first;
+    private int first;
     /**
      * Remaining elements of list.
      */
-    public IntList rest;
+    private IntList rest;
 
     /**
      * A List with first FIRST0 and rest REST0.
@@ -110,8 +110,29 @@ public class IntList {
      * This method is destructive. If given null
      * as an input, returns null.
      */
-    public static IntList reverse(IntList A){
-        return null;
+    public static IntList reverse(IntList A) {
+        if (A == null) {
+            return null;
+        }
+        /** no-destructive method
+        IntList reversedList = null;
+        reversedList = new IntList(A.first, reversedList);
+        IntList restCopy = A.rest;
+        while (restCopy != null) {
+            reversedList = new IntList(restCopy.first, reversedList);
+            restCopy = restCopy.rest;
+        }
+        return reversedList;
+         */
+        IntList frontReversed = null; //  the final result
+        while (A != null) { // all of this is reversed
+            IntList copy = A.rest;  // as a temp
+            A.rest = frontReversed; // use front as rest
+            frontReversed = A; // save the reversed
+            A = copy; // continue
+        }
+        return frontReversed;
+
     }
 
 
