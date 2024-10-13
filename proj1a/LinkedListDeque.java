@@ -1,13 +1,13 @@
-public class LinkedListDeque<Horse> {
-    private final StuffNode sentinel;
+public class LinkedListDeque<T> {
+    private static final StuffNode sentinel;
     private int size;
 
     private class StuffNode {
         private StuffNode prev;
-        private Horse item;
+        private T item;
         private StuffNode next;
 
-        private StuffNode(StuffNode s1, Horse h, StuffNode s2) {
+        private StuffNode(StuffNode s1, T h, StuffNode s2) {
             prev = s1;
             item = h;
             next = s2;
@@ -18,7 +18,7 @@ public class LinkedListDeque<Horse> {
      * last is a pointer
      * set sentinel item to be null
      */
-    public LinkedListDeque(Horse x) {
+    public LinkedListDeque(T x) {
         size = 1;
         sentinel = new StuffNode(null, null, null);
         sentinel.next = new StuffNode(sentinel, x, sentinel);
@@ -32,7 +32,7 @@ public class LinkedListDeque<Horse> {
         sentinel.prev = sentinel;
     }
 
-    public void addFirst(Horse item) {
+    public void addFirst(T item) {
         StuffNode newNode = new StuffNode(sentinel, item, sentinel.next);
         if (isEmpty()) {
             sentinel.prev = newNode;
@@ -42,9 +42,9 @@ public class LinkedListDeque<Horse> {
         size += 1;
     }
 
-    public void addLast(Horse item) {
+    public void addLast(T item) {
         StuffNode newNode = new StuffNode(sentinel.prev, item, sentinel);
-        if (isEmpty()){
+        if (isEmpty()) {
             sentinel.next = newNode;
         }
         sentinel.prev.next = newNode;
@@ -68,29 +68,29 @@ public class LinkedListDeque<Horse> {
         }
     }
 
-    public Horse removeFirst() {
+    public T removeFirst() {
         if (isEmpty()) {
             return null;
         }
-        Horse beforeFirst = sentinel.next.item;
+        T beforeFirst = sentinel.next.item;
         sentinel.next.next.prev = sentinel;
         sentinel.next = sentinel.next.next;
         size -= 1;
         return beforeFirst;
     }
 
-    public Horse removeLast() {
+    public T removeLast() {
         if (isEmpty()) {
             return null;
         }
-        Horse beforeLast = sentinel.prev.item;
+        T beforeLast = sentinel.prev.item;
         sentinel.prev.prev.next = sentinel;
         sentinel.prev = sentinel.prev.prev;
         size -= 1;
         return beforeLast;
     }
 
-    public Horse get(int index) {
+    public T get(int index) {
         if (index < 0 || index >= size) {
             return null;
         }
@@ -103,7 +103,7 @@ public class LinkedListDeque<Horse> {
     }
 
     // helper function by middleman
-    public Horse getRecursive(StuffNode middleman, int index) {
+    public T getRecursive(StuffNode middleman, int index) {
         if (index == 0) {
             return middleman.item;
         }
@@ -111,11 +111,10 @@ public class LinkedListDeque<Horse> {
     }
 
 
-    public Horse getRecursive(int index) {
+    public T getRecursive(int index) {
         if (index < 0 || index >= size) {
             return null;
         }
         return getRecursive(sentinel.next, index);
     }
 }
-
