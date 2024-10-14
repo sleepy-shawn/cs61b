@@ -3,7 +3,6 @@ import static org.junit.Assert.*;
 
 public class TestOffByN {
 
-
 	@Test
 	public void testEqualChars() {
 		CharacterComparator offBy2 = new OffByN(2);

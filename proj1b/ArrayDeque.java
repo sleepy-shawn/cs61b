@@ -1,5 +1,5 @@
 public class ArrayDeque<T> implements Deque<T> {
-    private final static int MIN_CAPACITY = 16;
+    private static final int MIN_CAPACITY = 16;
     private int size;
     private T[] items;
     private int nextFirst;
