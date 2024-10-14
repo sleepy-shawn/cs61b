@@ -4,15 +4,15 @@ ArrayDeque:
 
 Q: Give an example of at least one idea from the staff solution that would have made your solution better (if any).
 
-A: 
+A: The beautiful realization of nextFirst and nextLast.
 
 Q: What's something you felt proud of in your code, if anything?
 
-A:
+A: The adjusted tidy code style.
 
 Q: What's something that was particularly inelegant in your code, if anything?
 
-A:
+A: The identation maybe.
 
 Q: What did you learn by talking to your partner about writing ArrayDeque?
 
@@ -20,11 +20,11 @@ A:
 
 Q: What do you wish you would have known before writing ArrayDeque, if anything?
 
-A:
+A: How to realize the circular.
 
 Q: If you wrote ArrayDeque again, what would you do differently, if anything?
 
-A:
+A: draw more structures before starting coding.
 
 -----
 
@@ -32,15 +32,15 @@ LinkedListDeque:
 
 Q: Give an example of at least one idea from the staff solution that would have made your solution better (if any).
 
-A: 
+A: Removing the property "last".
 
 Q: What's something you felt proud of in your code, if anything?
 
-A:
+A: The better code style.
 
 Q: What's something that was particularly inelegant in your code, if anything?
 
-A:
+A: The less and poor explanation.
 
 Q: What did you learn by talking to your partner about writing LinkedListDeque?
 
@@ -48,11 +48,11 @@ A:
 
 Q: What do you wish you would have known before writing LinkedListDeque, if anything?
 
-A:
+A: The method to guarantee link.
 
 Q: If you wrote LinkedListDeque again, what would you do differently, if anything?
 
-A:
+A: Writing more tests.
 
 -----
 
@@ -60,4 +60,4 @@ Meta:
 
 Q: Did you like this design review process? Anything we should do differently next time?
 
-A: 
+A: Yes.
