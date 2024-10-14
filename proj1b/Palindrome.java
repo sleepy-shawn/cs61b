@@ -13,7 +13,7 @@ public class Palindrome {
 		return tellPalindrome(wordDeque);
 	}
 
-	// helper function
+	// helper function but destructive
 
 	public boolean tellPalindrome(Deque<Character> characterDeque) {
 		if (characterDeque.isEmpty() || characterDeque.size() == 1) {
@@ -28,4 +28,26 @@ public class Palindrome {
 			}
 		}
 	}
+
+	// overload isPalindrome but destructive
+	public boolean isPalindrome(String word, CharacterComparator cc) {
+		Deque<Character> wordDeque = wordToDeque(word);
+		return tellPalindrome(wordDeque, cc);
+	}
+
+	// new helper function
+	public boolean tellPalindrome(Deque<Character> characterDeque, CharacterComparator cc) {
+		if (characterDeque.isEmpty() || characterDeque.size() == 1) {
+			return true;
+		} else {
+			char a = characterDeque.removeFirst();
+			char b = characterDeque.removeLast();
+			if (!cc.equalChars(a, b)) {
+				return false;
+			}else {
+				return tellPalindrome(characterDeque, cc);
+			}
+		}
+	}
+
 }
