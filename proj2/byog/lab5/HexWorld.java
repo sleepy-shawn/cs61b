@@ -14,7 +14,6 @@ import java.util.Random;
 public class HexWorld {
 	public void addHexgonal(TETile[][] world, position p, int s, TETile t) {
 
-
 	}
 
 	// helper class: start position at the left corner of the hexworld
@@ -28,29 +27,42 @@ public class HexWorld {
 	}
 
 	// helper methods to fill in the block with 0, 1
-	private int [][] ifFill(int s) {
+	// remember to change for the static.
+	private static int [][] ifFill(int s) {
 		int max = s * 3 - 2;// the max num of items of a row
-		int [][] block = new int[max][max];
-
-
+		int [][] block = new int[max][2 * s];
+		for (int i = 0; i < 2 * s ; i = i + 1) {
+			int startNum = start1(i, s);
+			int count = fillNum(i, s);
+			for (int j = 0; j < count; j = j + 1) {
+				block[startNum][i] = 1;
+				startNum = startNum + 1;
+			}
+		}
+		return block;
 	}
 
 	// another helper methods for calculating the num of 1 of every row
 	// x starts from 0
-	private int fillNum(int x, int s) {
+	public static int fillNum(int x, int s) {
 		int num;
 		if (x < s) {
 			num = s + 2 * x;
 		} else {
-			num = s * 3 - 2 - 2 * (x - s);
+			num = 3 * s - 2 - 2*(x - s);
 		}
 		return num;
 	}
 
 	// another helper methods about where to start 1
 	// y starts from 0
-	private int start1 (int y, int s) {
-		int p = s + y;
+	public static int start1 (int y, int s) {
+		int p;
+		if (y < s){
+		    p = s - 1 - y;
+		} else {
+			p = y - s;
+		}
+		return p;
 	}
-
 }
