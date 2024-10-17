@@ -19,6 +19,7 @@ public class TestArrayRingBuffer {
         sad1.enqueue(8);
         sad1.enqueue(9);
         sad1.enqueue(10);
+        assertEquals(sad1.fillCount(), 3);
         assertEquals((Integer) 8, sad1.dequeue());
         assertEquals((Integer) 9, sad1.dequeue());
         assertEquals((Integer) 10, sad1.dequeue());
@@ -29,6 +30,7 @@ public class TestArrayRingBuffer {
         ArrayRingBuffer<Integer> sad2 = new ArrayRingBuffer(6);
         sad2.enqueue(8);
         sad2.enqueue(9);
+        assertEquals(sad2.fillCount(), 2);
         assertEquals((Integer) 8, sad2.peek());
     }
 
@@ -37,6 +39,7 @@ public class TestArrayRingBuffer {
         ArrayRingBuffer<Integer> sad3 = new ArrayRingBuffer(6);
         sad3.enqueue(99);
         sad3.enqueue(66);
+        assertEquals(sad3.fillCount(), 2);
         assertEquals(6, sad3.capacity());
         assertEquals(2,sad3.fillCount());
     }
