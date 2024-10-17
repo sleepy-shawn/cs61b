@@ -4,12 +4,41 @@ import static org.junit.Assert.*;
 
 /** Tests the ArrayRingBuffer class.
  *  @author Josh Hug
+ * @author Ge SHuai
  */
 
 public class TestArrayRingBuffer {
     @Test
     public void someTest() {
-        //ArrayRingBuffer arb = new ArrayRingBuffer(10);
+        ArrayRingBuffer<Integer> arb = new ArrayRingBuffer(10);
+    }
+
+    @Test
+    public void testEnqueue() {
+        ArrayRingBuffer<Integer> sad1 = new ArrayRingBuffer(6);
+        sad1.enqueue(8);
+        sad1.enqueue(9);
+        sad1.enqueue(10);
+        assertEquals((Integer) 8, sad1.dequeue());
+        assertEquals((Integer) 9, sad1.dequeue());
+        assertEquals((Integer) 10, sad1.dequeue());
+    }
+
+    @Test
+    public void testPeek() {
+        ArrayRingBuffer<Integer> sad2 = new ArrayRingBuffer(6);
+        sad2.enqueue(8);
+        sad2.enqueue(9);
+        assertEquals((Integer) 8, sad2.peek());
+    }
+
+    @Test
+    public void testCapacity() {
+        ArrayRingBuffer<Integer> sad3 = new ArrayRingBuffer(6);
+        sad3.enqueue(99);
+        sad3.enqueue(66);
+        assertEquals(6, sad3.capacity());
+        assertEquals(2,sad3.fillCount());
     }
 
     /** Calls tests for ArrayRingBuffer. */
