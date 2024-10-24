@@ -1,12 +1,8 @@
 package byog.lab5;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
-
-import java.util.Random;
 
 /**
  * Draws a world consisting of hexagonal regions.
@@ -80,11 +76,11 @@ public class HexWorld {
 	public static void main(String[] args) {
 		// initialize the tile rendering engine
 		TERenderer ter = new TERenderer();
-		ter.initialize(30, 30);
+		ter.initialize(40, 30);
 
 
-		TETile[][] world = new TETile[30][30];
-		for (int x = 0; x < 30; x += 1) {
+		TETile[][] world = new TETile[40][30];
+		for (int x = 0; x < 40; x += 1) {
 			for (int y = 0; y < 30; y += 1) {
 				world[x][y] = Tileset.NOTHING;
 			}
@@ -98,5 +94,8 @@ public class HexWorld {
 
 		// draws the world to the screen
 		ter.renderFrame(world);
+	}
+
+	public static class TestMapGenerator {
 	}
 }
