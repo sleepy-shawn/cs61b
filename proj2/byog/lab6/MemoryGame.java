@@ -48,7 +48,6 @@ public class MemoryGame {
     }
 
     public String generateRandomString(int n) {
-        //TODO: Generate random string of letters of length n
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < n; i += 1) {
             int index = rand.nextInt(CHARACTERS.length);
@@ -58,8 +57,6 @@ public class MemoryGame {
     }
 
     public void drawFrame(String s) {
-        //TODO: Take the string and display it in the center of the screen
-        //TODO: If game is not over, display relevant game information at the top of the screen
         StdDraw.clear(StdDraw.BLACK);
         Font font = new Font("Arial", Font.BOLD, 30);
         StdDraw.setFont(font);
@@ -108,11 +105,9 @@ public class MemoryGame {
     }
 
     public void startGame() {
-        //TODO: Set any relevant variables before the game starts
         round = 1;
         gameOver = false;
         playerTurn = false;
-        //TODO: Establish Game loop
         while (!gameOver) {
             playerTurn = false;
             drawFrame("Round:" + round + "  Good Luck");
