@@ -1,4 +1,4 @@
-package byog.lab5;
+package byog.Core;
 
 import byog.TileEngine.TETile;
 import byog.TileEngine.Tileset;
@@ -44,6 +44,8 @@ public class MapGenerator {
 				r.draw();
 			}
 		}
+		connectRoom(world, rooms);
+		addDoor(world);
 	}
 
 	private boolean checkOverlap(Room newRoom, Room[] existingRooms) {
@@ -146,7 +148,116 @@ public class MapGenerator {
 
 			return withinXBounds && withinYBounds;
 		}
-
-
 	}
+
+	private void connectRoom(TETile[][] world, Room[] rooms) {
+		for (int i = 0; i < rooms.length && rooms[i] != null; i += 1) {
+			Room currentRoom = rooms[i];
+			Room closestRoom = findClosestRoom(rooms, i);
+			if (closestRoom != null) {
+				Position centerCurrent = new Position(
+						currentRoom.p.startX + currentRoom.width / 2,
+						currentRoom.p.startY + currentRoom.height / 2
+				);
+				Position centerClosest = new Position(
+						closestRoom.p.startX + closestRoom.width / 2,
+						closestRoom.p.startY + closestRoom.height / 2
+				);
+
+				if (RANDOM.nextBoolean()) {
+					drawHorizontalHallway(world, centerCurrent.startX, centerClosest.startX, centerCurrent.startY);
+					drawVerticalHallway(world, centerCurrent.startY, centerClosest.startY, centerClosest.startX);
+				} else {
+					drawVerticalHallway(world, centerCurrent.startY, centerClosest.startY, centerCurrent.startX);
+					drawHorizontalHallway(world, centerCurrent.startX , centerClosest.startX, centerClosest.startY);
+				}
+			}
+		}
+	}
+
+	private Room findClosestRoom(Room[] rooms, int index) {
+		Room currentRoom = rooms[index];
+		Room closestRoom = null;
+		double closestDistance = Double.MAX_VALUE;
+		for (int i = 0; i < index; i += 1) {
+			Room otherRoom = rooms[i];
+			double distance = distanceBetweenCenters(currentRoom, otherRoom);
+			if (distance < closestDistance) {
+				closestDistance = distance;
+				closestRoom = otherRoom;
+			}
+		}
+		return closestRoom;
+	}
+
+	private void drawHorizontalHallway(TETile[][] world, int x1, int x2, int y) {
+		int minX = Math.min(x1, x2);
+		int maxX = Math.max(x1, x2);
+
+		for (int x = minX; x <= maxX; x += 1) {
+			world[x][y] = Tileset.FLOOR;
+
+			if (y + 1 < HEIGHT && world[x][y + 1] == Tileset.NOTHING) {
+				world[x][y + 1] = Tileset.WALL;
+			}
+			if (y - 1 >= 0 && world[x][y - 1] == Tileset.NOTHING) {
+				world[x][y - 1] = Tileset.WALL;
+			}
+		}
+	}
+
+	private void drawVerticalHallway(TETile[][] world, int y1, int y2, int x) {
+		int minY = Math.min(y1, y2);
+		int maxY = Math.max(y1, y2);
+
+		for (int y = minY; y <= maxY; y += 1) {
+			world[x][y] = Tileset.FLOOR;
+
+			if (x + 1 < WIDTH && world[x + 1][y] == Tileset.NOTHING) {
+				world[x + 1][y] = Tileset.WALL;
+			}
+			if (x - 1 >= 0 && world[x - 1][y] == Tileset.NOTHING) {
+				world[x - 1][y] = Tileset.WALL;
+			}
+
+		}
+	}
+
+	/**
+	private void drawLowRightCorner(TETile[][] world, int x1, int y1) {
+		world[x1][y1] = Tileset.FLOOR;
+		world[x1 + 1][y1] = Tileset.WALL;
+		world[x1][y1 - 1] = Tileset.WALL;
+		world[x1 + 1][y1 - 1] = Tileset.WALL;
+	}
+
+	private void drawTopLeftCorner(TETile[][] world, int x1, int y1) {
+		world[x1][y1] = Tileset.FLOOR;
+		world[x1 -1][y1] = Tileset.WALL;
+		world[x1][y1 + 1] = Tileset.WALL;
+		world[x1 - 1][y1 + 1] = Tileset.WALL;
+	}
+	 */
+
+
+
+	private double distanceBetweenCenters(Room r1, Room r2) {
+		int x1 = r1.p.startX + r1.width / 2;
+		int x2 = r2.p.startX + r2.width / 2;
+		int y1 = r1.p.startY - r1.height / 2;
+		int y2 = r2.p.startY - r2.height / 2;
+		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2));
+	}
+
+	private void addDoor(TETile[][] world) {
+		while (true) {
+			int x = RANDOM.nextInt(WIDTH);
+			int y = RANDOM.nextInt(HEIGHT);
+			if (world[x][y] == Tileset.WALL) {
+				world[x][y] = Tileset.LOCKED_DOOR;
+				break;
+			}
+		}
+	}
+
 }

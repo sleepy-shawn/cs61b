@@ -1,4 +1,4 @@
-package byog.lab5;
+package byog.Core;
 
 import byog.TileEngine.TERenderer;
 import byog.TileEngine.TETile;
@@ -9,7 +9,7 @@ public class TestMapGenerator {
 	private static final int WIDTH = 80;
 	private static final int HEIGHT = 30;
 
-	private static final long SEED = 55772;
+	private static final long SEED = 666662;
 
 	public static void main(String[] args) {
 		TERenderer ter = new TERenderer();
