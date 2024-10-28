@@ -12,6 +12,8 @@ public class MapGenerator {
 	private long SEED;
 	private Random RANDOM;
 	private TETile[][] world;
+	private GameState gameState;
+	private Player player;
 
 
 	public MapGenerator(int w, int h, long s, TETile[][] wo) {
@@ -20,6 +22,12 @@ public class MapGenerator {
 		SEED = s;
 		world = wo;
 		RANDOM = new Random(SEED);
+		player = new Player(0,0);
+		gameState = new GameState(SEED, player.PlayerX, player.PlayerY);
+	}
+
+	public GameState getGameState() {
+		return gameState;
 	}
 
 	private class Position {
@@ -29,6 +37,16 @@ public class MapGenerator {
 		public Position(int x, int y) {
 			startX = x;
 			startY = y;
+		}
+	}
+
+	private class Player {
+		int PlayerX;
+		int PlayerY;
+
+		public Player(int x, int y) {
+			PlayerX = x;
+			PlayerY = y;
 		}
 	}
 
@@ -46,6 +64,8 @@ public class MapGenerator {
 		}
 		connectRoom(world, rooms);
 		addDoor(world);
+		randomPlayer(world);
+
 	}
 
 	private boolean checkOverlap(Room newRoom, Room[] existingRooms) {
@@ -223,24 +243,6 @@ public class MapGenerator {
 		}
 	}
 
-	/**
-	private void drawLowRightCorner(TETile[][] world, int x1, int y1) {
-		world[x1][y1] = Tileset.FLOOR;
-		world[x1 + 1][y1] = Tileset.WALL;
-		world[x1][y1 - 1] = Tileset.WALL;
-		world[x1 + 1][y1 - 1] = Tileset.WALL;
-	}
-
-	private void drawTopLeftCorner(TETile[][] world, int x1, int y1) {
-		world[x1][y1] = Tileset.FLOOR;
-		world[x1 -1][y1] = Tileset.WALL;
-		world[x1][y1 + 1] = Tileset.WALL;
-		world[x1 - 1][y1 + 1] = Tileset.WALL;
-	}
-	 */
-
-
-
 	private double distanceBetweenCenters(Room r1, Room r2) {
 		int x1 = r1.p.startX + r1.width / 2;
 		int x2 = r2.p.startX + r2.width / 2;
@@ -260,4 +262,62 @@ public class MapGenerator {
 		}
 	}
 
+	private void randomPlayer(TETile[][] world) {
+		while (true) {
+			int x = RANDOM.nextInt(WIDTH);
+			int y = RANDOM.nextInt(HEIGHT);
+			if (world[x][y] == Tileset.FLOOR) {
+				world[x][y] = Tileset.PLAYER;
+				player.PlayerX = x;
+				player.PlayerY = y;
+				break;
+			}
+		}
+	}
+
+	public void left() {
+		int x = player.PlayerX;
+		int y = player.PlayerY;
+		if (world[x - 1][y] != Tileset.WALL) {
+			world[x][y] = Tileset.FLOOR;
+			world[x - 1][y] = Tileset.PLAYER;
+			player.PlayerX -= 1;
+			gameState = new GameState(SEED, player.PlayerX, player.PlayerY);
+		}
+	}
+
+	public void right() {
+		int x = player.PlayerX;
+		int y = player.PlayerY;
+		if (world[x + 1][y] != Tileset.WALL) {
+			world[x][y] = Tileset.FLOOR;
+			world[x + 1][y] = Tileset.PLAYER;
+			player.PlayerX += 1;
+			gameState = new GameState(SEED, player.PlayerX, player.PlayerY);
+		}
+	}
+
+	public void up() {
+		int x = player.PlayerX;
+		int y = player.PlayerY;
+		if (world[x][y + 1] != Tileset.WALL) {
+			world[x][y] = Tileset.FLOOR;
+			world[x][y + 1] = Tileset.PLAYER;
+			player.PlayerY += 1;
+			gameState = new GameState(SEED, player.PlayerX, player.PlayerY);
+		}
+
+	}
+
+	public void down() {
+		int x = player.PlayerX;
+		int y = player.PlayerY;
+		if (world[x][y - 1] != Tileset.WALL) {
+			world[x][y] = Tileset.FLOOR;
+			world[x][y - 1] = Tileset.PLAYER;
+			player.PlayerY -= 1;
+			gameState = new GameState(SEED, player.PlayerX, player.PlayerY);
+		}
+
+	}
 }
