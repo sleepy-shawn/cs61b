@@ -21,7 +21,7 @@ public class TestMapGenerator {
 				world[x][y] = Tileset.NOTHING;
 			}
 		}
-		MapGenerator mg = new MapGenerator(WIDTH, HEIGHT, SEED, world);
+		MapGenerator mg = new MapGenerator(WIDTH, HEIGHT, SEED, world, 0, 0);
 		mg.mapGenerate();
 		ter.renderFrame(world);
 	}

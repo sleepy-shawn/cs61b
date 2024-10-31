@@ -12,22 +12,16 @@ public class MapGenerator {
 	private long SEED;
 	private Random RANDOM;
 	private TETile[][] world;
-	private GameState gameState;
 	private Player player;
 
 
-	public MapGenerator(int w, int h, long s, TETile[][] wo) {
+	public MapGenerator(int w, int h, long s, TETile[][] wo, int px, int py) {
 		WIDTH = w;
 		HEIGHT = h;
 		SEED = s;
 		world = wo;
 		RANDOM = new Random(SEED);
-		player = new Player(0,0);
-		gameState = new GameState(SEED, player.PlayerX, player.PlayerY);
-	}
-
-	public GameState getGameState() {
-		return gameState;
+		player = new Player(px, py);;
 	}
 
 	private class Position {
@@ -48,6 +42,14 @@ public class MapGenerator {
 			PlayerX = x;
 			PlayerY = y;
 		}
+	}
+
+	public int getPlayerX() {
+		return player.PlayerX;
+	}
+
+	public int getPlayerY() {
+		return player.PlayerY;
 	}
 
 	public void mapGenerate() {
@@ -278,33 +280,30 @@ public class MapGenerator {
 	public void left() {
 		int x = player.PlayerX;
 		int y = player.PlayerY;
-		if (world[x - 1][y] != Tileset.WALL) {
+		if (!world[x - 1][y].equals(Tileset.WALL)) {
 			world[x][y] = Tileset.FLOOR;
 			world[x - 1][y] = Tileset.PLAYER;
 			player.PlayerX -= 1;
-			gameState = new GameState(SEED, player.PlayerX, player.PlayerY);
 		}
 	}
 
 	public void right() {
 		int x = player.PlayerX;
 		int y = player.PlayerY;
-		if (world[x + 1][y] != Tileset.WALL) {
+		if (!world[x + 1][y].equals( Tileset.WALL)) {
 			world[x][y] = Tileset.FLOOR;
 			world[x + 1][y] = Tileset.PLAYER;
 			player.PlayerX += 1;
-			gameState = new GameState(SEED, player.PlayerX, player.PlayerY);
 		}
 	}
 
 	public void up() {
 		int x = player.PlayerX;
 		int y = player.PlayerY;
-		if (world[x][y + 1] != Tileset.WALL) {
+		if (!world[x][y + 1].equals(Tileset.WALL)) {
 			world[x][y] = Tileset.FLOOR;
 			world[x][y + 1] = Tileset.PLAYER;
 			player.PlayerY += 1;
-			gameState = new GameState(SEED, player.PlayerX, player.PlayerY);
 		}
 
 	}
@@ -312,11 +311,10 @@ public class MapGenerator {
 	public void down() {
 		int x = player.PlayerX;
 		int y = player.PlayerY;
-		if (world[x][y - 1] != Tileset.WALL) {
+		if (!world[x][y - 1].equals(Tileset.WALL)) {
 			world[x][y] = Tileset.FLOOR;
 			world[x][y - 1] = Tileset.PLAYER;
 			player.PlayerY -= 1;
-			gameState = new GameState(SEED, player.PlayerX, player.PlayerY);
 		}
 
 	}
