@@ -25,43 +25,50 @@ public class Game implements Serializable {
     public void playWithKeyboard() {
         GameUI ui = new GameUI(WIDTH, HEIGHT);
         ui.drawMenu();
+        String seedInput = "";
+        char nextMove = '0';
+        char number = '0';
+        boolean newGame = false;
 
-        String input = "";
-        char nextMove = 0;
-
-        if (StdDraw.nextKeyTyped() == 'N') {
-            Character number = StdDraw.nextKeyTyped();
-            while (Character.isDigit(number)) {
-                input += String.valueOf(number);
-                if (StdDraw.hasNextKeyTyped()) {
-                    number = StdDraw.nextKeyTyped();
+        /* If load saved game */
+        while (true) {
+            if (!StdDraw.hasNextKeyTyped()) {
+                continue;
+            }
+            char key  = Character.toUpperCase(StdDraw.nextKeyTyped());
+            if (key == 'L') {
+                GameState loadedState = LoadGame.loadGame("Game.ser");
+                if (loadedState != null) {
+                    SEED = loadedState.getSeed();
+                    finalWorldFrame = new TETile[WIDTH][HEIGHT];
+                    mp = new MapGenerator(WIDTH, HEIGHT, SEED, finalWorldFrame);
+                }
+                break;
+            } else if (key == 'N') {
+                newGame = true;
+                finalWorldFrame = new TETile[WIDTH][HEIGHT];
+            } else {
+                if (Character.isDigit(key)) {
+                    seedInput += key;
                 } else {
                     break;
                 }
             }
+        }
+
+        if (newGame) {
             nextMove = number;
-            SEED = Long.parseLong(input);
-            finalWorldFrame = new TETile[WIDTH][HEIGHT];
+            SEED = Long.parseLong(seedInput);
             for (int x = 0; x < WIDTH; x += 1) {
                 for (int y = 0; y < HEIGHT; y += 1) {
                     finalWorldFrame[x][y] = Tileset.NOTHING;
                 }
             }
             mp = new MapGenerator(WIDTH, HEIGHT, SEED, finalWorldFrame);
-            ter.initialize(WIDTH, HEIGHT);
             mp.mapGenerate();
-            ter.renderFrame(finalWorldFrame);
-
-
-        } else if (StdDraw.nextKeyTyped() == 'L') {
-            GameState loadedState = LoadGame.loadGame("game.ser");
-            if (loadedState != null) {
-                SEED = loadedState.getSeed();
-                finalWorldFrame = new TETile[WIDTH][HEIGHT];
-                mp = new MapGenerator(WIDTH, HEIGHT, SEED, finalWorldFrame);
-            }
-
         }
+        ter.initialize(WIDTH, HEIGHT);
+        ter.renderFrame(finalWorldFrame);
 
 
         while (true) {
@@ -84,6 +91,13 @@ public class Game implements Serializable {
                 } else {
                     nextMove = StdDraw.nextKeyTyped();
                 }
+            }
+            ter.renderFrame(finalWorldFrame);
+            HUD();
+            StdDraw.show();
+            StdDraw.pause(20);
+            if (StdDraw.hasNextKeyTyped()) {
+                nextMove = Character.toUpperCase(StdDraw.nextKeyTyped());
             }
         }
     }
@@ -139,20 +153,33 @@ public class Game implements Serializable {
     }
 
     public void HUD() {
-        while (true) {
-            int x = (int)StdDraw.mouseX();
-            int y = (int)StdDraw.mouseY();
+        String info = "";
+        int x = (int) StdDraw.mouseX();
+        int y = (int) StdDraw.mouseY();
+        if (x >= 0 && x < WIDTH && y >= 0 && y <= HEIGHT) {
             if (finalWorldFrame[x][y] == Tileset.WALL) {
-                StdDraw.text(5, 28, "WALL");
+                info = "Wall";
             } else if (finalWorldFrame[x][y] == Tileset.FLOOR) {
-                StdDraw.text(5, 28, "FLOOR");
+                info = "Floor";
             } else if (finalWorldFrame[x][y] == Tileset.NOTHING) {
-                StdDraw.text(5, 28, "Nothing here");
+                info = "Nothing here";
             } else if (finalWorldFrame[x][y] == Tileset.PLAYER) {
-                StdDraw.text(5, 28, "You");
+                info = "You";
             } else if (finalWorldFrame[x][y] == Tileset.LOCKED_DOOR) {
-                StdDraw.text(5, 28, "Locked Door");
+                info = "This is a locked door";
             }
         }
+        StdDraw.setPenColor(StdDraw.BLACK);
+        StdDraw.filledRectangle(1, HEIGHT - 1, 5,1);
+
+        StdDraw.setPenColor(StdDraw.WHITE);
+        StdDraw.setFont(new Font("Arial", Font.BOLD, 5));
+        StdDraw.textLeft(1, HEIGHT - 1, info);
+}
+
+
+    public static void main(String args[]) {
+        Game g  = new Game();
+        g.playWithKeyboard();
     }
 }
