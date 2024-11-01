@@ -9,11 +9,13 @@ public class GameState implements Serializable {
 	private TETile[][] finalWorldFrame;
 	private int playerX;
 	private int playerY;
+	private long SEED;
 
-	public GameState(TETile[][] finalWorldFrame, int x, int y) {
+	public GameState(TETile[][] finalWorldFrame, int x, int y, long SEED) {
 		this.finalWorldFrame = finalWorldFrame;
 		this.playerX = x;
 		this.playerY = y;
+		this.SEED = SEED;
 
 	}
 
@@ -27,5 +29,9 @@ public class GameState implements Serializable {
 
 	public TETile[][]getMap() {
 		return finalWorldFrame;
+	}
+
+	public long getSeed() {
+		return this.SEED;
 	}
 }

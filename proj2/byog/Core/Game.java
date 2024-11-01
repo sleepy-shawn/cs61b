@@ -19,6 +19,8 @@ public class Game implements Serializable {
     public long SEED;
     public TETile[][] finalWorldFrame;
     public MapGenerator mp;
+    public int playerX;
+    public int playerY;
 
     // Method used for playing a fresh game. The game should start from the main menu.
     public void playWithKeyboard() {
@@ -37,9 +39,10 @@ public class Game implements Serializable {
                 GameState loadedState = LoadGame.loadGame("Game.ser");
                 if (loadedState != null) {
                     finalWorldFrame = loadedState.getMap();
-                    int x = loadedState.getPlayerX();
-                    int y = loadedState.getPlayerY();
-                    mp = new MapGenerator(WIDTH, HEIGHT, SEED, finalWorldFrame, x, y);
+                    playerX = loadedState.getPlayerX();
+                    playerY = loadedState.getPlayerY();
+                    SEED = loadedState.getSeed();
+                    mp = new MapGenerator(WIDTH, HEIGHT, SEED, finalWorldFrame, playerX, playerY);
                     break;
                 }
             } else if (key == 'N') {
@@ -79,7 +82,7 @@ public class Game implements Serializable {
             }
             if (nextMove == 'Q') {
                 SaveGame sg = new SaveGame();
-                sg.saveGame(new GameState(finalWorldFrame, mp.getPlayerX(), mp.getPlayerY()), "game.ser");
+                sg.saveGame(new GameState(finalWorldFrame, mp.getPlayerX(), mp.getPlayerY(), SEED),"game.ser");
                 System.exit(0);
             } else {
                 if (nextMove == 'A') {
@@ -117,23 +120,80 @@ public class Game implements Serializable {
      */
 
     public TETile[][] playWithInputString(String input) {
-        return finalWorldFrame;
-    }
+        String seedInput = "";
+
+        int index = 0;
+        int next = '0';
+        while(index < input.length()) {
+            next = Character.toUpperCase(input.charAt(index));
+            if (next == 'N') {
+                index += 1;
+                finalWorldFrame = new TETile[WIDTH][HEIGHT];
+                while (index < input.length() && Character.isDigit(input.charAt(index))) {
+                    seedInput += input.charAt(index);
+                    index += 1;
+                }
+                SEED = Long.parseLong(seedInput);
+                for (int x = 0; x < WIDTH; x += 1) {
+                    for (int y = 0; y < HEIGHT; y += 1) {
+                        finalWorldFrame[x][y] = Tileset.NOTHING;
+                    }
+                }
+                mp = new MapGenerator(WIDTH, HEIGHT, SEED, finalWorldFrame, 0, 0);
+                mp.mapGenerate();
+                seedInput = "";
+            } else if (next == 'L') {
+                GameState loadedState = LoadGame.loadGame("game.ser");
+                if (loadedState != null) {
+                    finalWorldFrame = loadedState.getMap();
+                    playerX = loadedState.getPlayerX();
+                    playerY = loadedState.getPlayerY();
+                    SEED = loadedState.getSeed();
+                    mp = new MapGenerator(WIDTH, HEIGHT, SEED, finalWorldFrame, playerX, playerY);
+                }
+                index += 1;
+            } else if (mp != null && next == 'A') {
+                mp.left();
+                index += 1;
+            } else if (mp != null && next == 'D') {
+                mp.right();
+                index += 1;
+            } else if (mp != null && next == 'W') {
+                mp.up();
+                index += 1;
+            } else if (mp != null && next == 'S') {
+                mp.down();
+                index += 1;
+            } else if (mp != null && next == ':') {
+                if (index + 1 < input.length() && Character.toUpperCase(input.charAt(index + 1)) == 'Q') {
+                    SaveGame sg = new SaveGame();
+                    sg.saveGame(new GameState(finalWorldFrame, mp.getPlayerX(), mp.getPlayerY(), SEED), "game.ser");
+                    break;
+                }
+                else {
+                    index += 1;
+                }
+            } else {
+                index += 1;
+            }
+        }
+            return finalWorldFrame;
+        }
 
     public void HUD() {
         String info = "";
         int x = (int) StdDraw.mouseX();
         int y = (int) StdDraw.mouseY();
         if (x >= 0 && x < WIDTH && y >= 0 && y < HEIGHT) {
-            if (finalWorldFrame[x][y] == Tileset.WALL) {
+            if (finalWorldFrame[x][y] .equals(Tileset.WALL)) {
                 info = "Wall";
-            } else if (finalWorldFrame[x][y] == Tileset.FLOOR) {
+            } else if (finalWorldFrame[x][y] .equals(Tileset.FLOOR)) {
                 info = "Floor";
-            } else if (finalWorldFrame[x][y] == Tileset.NOTHING) {
+            } else if (finalWorldFrame[x][y] .equals(Tileset.NOTHING)) {
                 info = "Nothing here";
-            } else if (finalWorldFrame[x][y] == Tileset.PLAYER) {
+            } else if (finalWorldFrame[x][y] .equals(Tileset.PLAYER)) {
                 info = "You";
-            } else if (finalWorldFrame[x][y] == Tileset.LOCKED_DOOR) {
+            } else if (finalWorldFrame[x][y] .equals(Tileset.LOCKED_DOOR)) {
                 info = "This is a locked door";
             }
         } else {
