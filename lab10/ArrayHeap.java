@@ -1,4 +1,7 @@
 import org.junit.Test;
+
+import java.util.NoSuchElementException;
+
 import static org.junit.Assert.*;
 
 /**
@@ -27,24 +30,21 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      * Returns the index of the node to the left of the node at i.
      */
     private static int leftIndex(int i) {
-        /* TODO: Your code here! */
-        return 0;
+        return 2 * i;
     }
 
     /**
      * Returns the index of the node to the right of the node at i.
      */
     private static int rightIndex(int i) {
-        /* TODO: Your code here! */
-        return 0;
+        return 2 * i + 1;
     }
 
     /**
      * Returns the index of the node that is the parent of the node at i.
      */
     private static int parentIndex(int i) {
-        /* TODO: Your code here! */
-        return 0;
+        return i / 2;
     }
 
     /**
@@ -106,9 +106,13 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     private void swim(int index) {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
-
-        /** TODO: Your code here. */
-        return;
+        int parent = parentIndex(index);
+        if (inBounds(parent)) {
+            if (getNode(index).myPriority < getNode(parent).myPriority) {
+                swap(index, parent);
+                swim(parent);
+            }
+        }
     }
 
     /**
@@ -117,9 +121,17 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
     private void sink(int index) {
         // Throws an exception if index is invalid. DON'T CHANGE THIS LINE.
         validateSinkSwimArg(index);
+        int left = leftIndex(index);
+        int right = rightIndex(index);
+        int min_child = min(left, right);
+        if (inBounds(min_child)) {
+            if (getNode(index).myPriority > getNode(min_child).myPriority) {
+                swap(min_child, index);
+                sink(min_child);
+            }
+        }
 
-        /** TODO: Your code here. */
-        return;
+
     }
 
     /**
@@ -132,8 +144,9 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
         if (size + 1 == contents.length) {
             resize(contents.length * 2);
         }
-
-        /* TODO: Your code here! */
+        size += 1;
+        contents[size] = new Node(item, priority);
+        swim(size);
     }
 
     /**
@@ -142,8 +155,7 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     @Override
     public T peek() {
-        /* TODO: Your code here! */
-        return null;
+        return contents[1].item();
     }
 
     /**
@@ -157,8 +169,13 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     @Override
     public T removeMin() {
-        /* TODO: Your code here! */
-        return null;
+        T copy = contents[1].item();
+        Node bottom = contents[size];
+        contents[1] = bottom;
+        contents[size] = null;
+        size -= 1;
+        sink(1);
+        return copy;
     }
 
     /**
@@ -180,8 +197,35 @@ public class ArrayHeap<T> implements ExtrinsicPQ<T> {
      */
     @Override
     public void changePriority(T item, double priority) {
-        /* TODO: Your code here! */
-        return;
+        int Index = 1;
+        int aimIndex;
+        while (getNode(Index).myPriority > priority) {
+            if (getNode(Index).item().equals(item)) {
+                aimIndex = Index;
+            } else if (inBounds(Index)) {
+                Index *= 2;
+            } else {
+                break;
+            }
+        }
+        while (!getNode(Index).item().equals(item)) {
+            if (Index > size) {
+                throw new NoSuchElementException();
+            }
+            Index += 1;
+        }
+        aimIndex = Index;
+        Node aimNode = getNode(aimIndex);
+        if (aimNode.myPriority > priority) {
+            aimNode.myPriority = priority;
+            swim(aimIndex);
+        } else if (aimNode.myPriority < priority) {
+            aimNode.myPriority = priority;
+            sink(aimIndex);
+        } else {
+            return;
+        }
+
     }
 
     /**
