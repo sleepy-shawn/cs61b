@@ -34,8 +34,13 @@ public class MergeSort {
     /** Returns a queue of queues that each contain one item from items. */
     private static <Item extends Comparable> Queue<Queue<Item>>
             makeSingleItemQueues(Queue<Item> items) {
-        // Your code here!
-        return null;
+        Queue<Queue<Item>> singleItemQueues = new Queue<Queue<Item>>();
+        for (Item i : items) {
+            Queue<Item> singleItemQueue = new Queue<Item>();
+            singleItemQueue.enqueue(i);
+            singleItemQueues.enqueue(singleItemQueue);
+        }
+        return singleItemQueues;
     }
 
     /**
@@ -53,14 +58,35 @@ public class MergeSort {
      */
     private static <Item extends Comparable> Queue<Item> mergeSortedQueues(
             Queue<Item> q1, Queue<Item> q2) {
-        // Your code here!
-        return null;
+        Queue<Item> mergeQueue = new Queue<>();
+        while (!q1.isEmpty() || !q2.isEmpty()) {
+            Item minItem = getMin(q1, q2);
+            mergeQueue.enqueue(minItem);
+        }
+        return mergeQueue;
     }
 
     /** Returns a Queue that contains the given items sorted from least to greatest. */
     public static <Item extends Comparable> Queue<Item> mergeSort(
             Queue<Item> items) {
-        // Your code here!
-        return items;
+        Queue<Queue<Item>> singleItemQueues = makeSingleItemQueues(items);
+        while (singleItemQueues.size() != 1) {
+            Queue<Item> queueA = singleItemQueues.dequeue();
+            Queue<Item> queueB = singleItemQueues.dequeue();
+            Queue<Item> mergeQueue = mergeSortedQueues(queueA, queueB);
+            singleItemQueues.enqueue(mergeQueue);
+        }
+        return singleItemQueues.peek();
+    }
+
+    public static void main(String args[]) {
+        Queue<Integer> scores = new Queue<>();
+        scores.enqueue(85);
+        scores.enqueue(100);
+        scores.enqueue(66);
+        scores.enqueue(35);
+        scores.enqueue(78);
+        System.out.println(scores);
+        System.out.println(mergeSort(scores));
     }
 }
